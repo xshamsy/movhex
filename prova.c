@@ -9,7 +9,6 @@ typedef struct info info;
 typedef struct Vet Vet;
 typedef struct coord coord;
 
-
 struct MovHex {
     int valore;
     Lista rotte;
@@ -110,7 +109,6 @@ int main() {
                 }
             }
             
-                            printf("\n");
 
             for(i=0; i<rows; i++) {
                 if((rows-i-1)%2==0)
@@ -152,168 +150,163 @@ void change_cost (int x, int y, int v, float r, MovHex * M) {
     M[col*(rows-1-y)+x].valore=check(v+M[col*(rows-1-y)+x].valore);
 
     if(y%2==0) {
-            k=1;
-            while(k<=r) {
-                row_sx=1;
-                row_dx=2;
-                
-                l=k;
-                if(x-k >=0)
-                    M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
-                if(x+k < col) {
-                    if(y-1>=0)
-                        M[col*(rows-y-2)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x+k].valore);
-                    if(y+1<rows)
-                        M[col*(rows-y)+x+k].valore=check((r-k)/r * v + M[col*(rows-y)+x+k].valore);
-                    M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
-                }
-                
-
-                while(row_dx!=k && row_sx!=k) {   
-                    l--;
-                    if(x-l >=0) {
-                        if(y+row_sx < rows)
-                            M[col*(rows-(y+row_sx)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx)-1)+x-l].valore);
-                        if(y+row_sx+1 < rows)
-                            M[col*(rows-(y+row_sx+1)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx+1)-1)+x-l].valore);
-                        if(y-row_sx>=0)
-                            M[col*(rows-1-(y-row_sx))+x-l].valore=check((r-k)/r * v +  M[col*(rows-1-(y-row_sx))+x-l].valore);
-                        if(y-row_sx-1>=0)
-                            M[col*(rows-1-(y-row_sx-1))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx-1))+x-l].valore);
-
-                    }
-                    if(x+l<col) {
-                        if(y+row_dx < rows)
-                            M[col*(rows-1-(y+row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y+row_dx))+x+l].valore);
-                        if(y+row_dx+1<rows)
-                            M[col*(rows-(y+row_dx+1)-1)+x+l].valore=check((r-k)/r * v + M[col*(rows-(y+row_dx+1)-1)+x+l].valore);
-                        if(y-row_dx>=0)
-                            M[col*(rows-1-(y-row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx))+x+l].valore);
-                        if(y-row_dx-1>=0)
-                            M[col*(rows-1-(y-row_dx-1))+x+l].valore=check((r-k)/r * v +M[col*(rows-1-(y-row_dx-1))+x+l].valore);
-                    }
-                    row_sx=row_sx+2;
-                    row_dx=row_dx+2;
-                }
-
-                if(row_sx==k) {
-                    j=0;
-                    do{
-                        if(x-l+1+j >=0 && x-l+1+j<col) {
-                            if(y+row_sx<rows)
-                                M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore);
-                            if(y-row_sx>=0)
-                                M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore);
-                        }
-                        j++;
-                    }while(j!=2*l-1);
-                }
-                if(row_dx==k) {
-                    j=0;
-                    do{
-                        if(x-l+1+j >=0 && x-l+1+j<col) {
-                            if(y+row_dx<rows)
-                                M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore);
-
-                            if(y-row_dx>=0)
-                                M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore);
-                        }
-                        j++;
-                    }while(j!=2*l-1);
-                    if(x-l+1 >=0 && x-l+1<col) {
-                        if(y+row_dx-1 < rows && y+row_dx-1>=0)
-                            M[col*(-(y+row_dx-1)+rows-1)+x-l+1].valore=check((r-k)/r * v + M[col*(-(y+row_dx-1)+rows-1)+x-l+1].valore);
-                        if(y-row_dx+1 >=0 && y-row_dx+1<rows)
-                            M[col*(-(y-row_dx+1)+rows-1)+x-l+1].valore=check((r-k)/r * v + M[col*(-(y-row_dx+1)+rows-1)+x-l+1].valore);
-                    }
-                }
-                k++;
+        k=1;
+        while(k<=r) {
+            row_sx=1;
+            row_dx=2;
+            
+            l=k;
+            if(x-k >=0)
+                M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
+            if(x+k < col) {
+                if(y-1>=0)
+                    M[col*(rows-y-2)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x+k].valore);
+                if(y+1<rows)
+                    M[col*(rows-y)+x+k].valore=check((r-k)/r * v + M[col*(rows-y)+x+k].valore);
+                M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
             }
-        
+                
+
+            while(row_dx!=k && row_sx!=k) {   
+                l--;
+                if(x-l >=0) {
+                    if(y+row_sx < rows)
+                        M[col*(rows-(y+row_sx)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx)-1)+x-l].valore);
+                    if(y+row_sx+1 < rows)
+                        M[col*(rows-(y+row_sx+1)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx+1)-1)+x-l].valore);
+                    if(y-row_sx>=0)
+                        M[col*(rows-1-(y-row_sx))+x-l].valore=check((r-k)/r * v +  M[col*(rows-1-(y-row_sx))+x-l].valore);
+                    if(y-row_sx-1>=0)
+                        M[col*(rows-1-(y-row_sx-1))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx-1))+x-l].valore);
+                }
+                if(x+l<col) {
+                    if(y+row_dx < rows)
+                        M[col*(rows-1-(y+row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y+row_dx))+x+l].valore);
+                    if(y+row_dx+1<rows)
+                        M[col*(rows-(y+row_dx+1)-1)+x+l].valore=check((r-k)/r * v + M[col*(rows-(y+row_dx+1)-1)+x+l].valore);
+                    if(y-row_dx>=0)
+                        M[col*(rows-1-(y-row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx))+x+l].valore);
+                    if(y-row_dx-1>=0)
+                        M[col*(rows-1-(y-row_dx-1))+x+l].valore=check((r-k)/r * v +M[col*(rows-1-(y-row_dx-1))+x+l].valore);
+                }
+                row_sx=row_sx+2;
+                row_dx=row_dx+2;
+            }
+
+            if(row_sx==k) {
+                j=0;
+                do{
+                    if(x-l+1+j >=0 && x-l+1+j<col) {
+                        if(y+row_sx<rows)
+                            M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore);
+                        if(y-row_sx>=0)
+                            M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore);
+                    }
+                    j++;
+                }while(j!=2*l-1);
+            }
+            if(row_dx==k) {
+                j=0;
+                do{
+                    if(x-l+1+j >=0 && x-l+1+j<col) {
+                        if(y+row_dx<rows)
+                            M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore);
+
+                        if(y-row_dx>=0)
+                            M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore);
+                    }
+                    j++;
+                }while(j!=2*l-1);
+                if(x-l+1 >=0 && x-l+1<col) {
+                    if(y+row_dx-1 < rows && y+row_dx-1>=0)
+                        M[col*(-(y+row_dx-1)+rows-1)+x-l+1].valore=check((r-k)/r * v + M[col*(-(y+row_dx-1)+rows-1)+x-l+1].valore);
+                    if(y-row_dx+1 >=0 && y-row_dx+1<rows)
+                        M[col*(-(y-row_dx+1)+rows-1)+x-l+1].valore=check((r-k)/r * v + M[col*(-(y-row_dx+1)+rows-1)+x-l+1].valore);
+                }
+            }
+            k++;
+        }
     }
     else {
-            k=1;
-            while(k<=r) {
-                row_sx=2;
-                row_dx=1;
+        k=1;
+        while(k<=r) {
+            row_sx=2;
+            row_dx=1;
             
-                l=k;
-                if(x-k >=0){
-                    M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
-                    if(y-1>=0)
-                        M[col*(rows-y-2)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x-k].valore);
-                    if(y+1<rows)
-                        M[col*(rows-y)+x-k].valore=check((r-k)/r * v + M[col*(rows-y)+x-k].valore);
-                }
-                if(x+k < col)
-                    M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
-                
-                while(row_dx!=k && row_sx!=k) {
-                    l--;
-                    if(x-l>=0) {
-                        if(y+row_sx<rows)
-                            M[col*(rows-(y+row_sx)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx)-1)+x-l].valore);
-                        if(y+row_sx+1<rows)
-                            M[col*(rows-(y+row_sx+1)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx+1)-1)+x-l].valore);
-                        if(y-row_sx>=0)
-                            M[col*(rows-1-(y-row_sx))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx))+x-l].valore);
-                        if(y-row_sx-1>=0)
-                            M[col*(rows-1-(y-row_sx-1))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx-1))+x-l].valore);
-                    }
-                    if(x+l<col) {
-                        if(y+row_dx<rows)
-                            M[col*(rows-1-(y+row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y+row_dx))+x+l].valore);
-                        if(y+row_dx+1<rows)
-                            M[col*(rows-(y+row_dx+1)-1)+x+l].valore=check((r-k)/r * v + M[col*(rows-(y+row_dx+1)-1)+x+l].valore);
-                        if(y-row_dx>=0)
-                            M[col*(rows-1-(y-row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx))+x+l].valore);
-                        if(y-row_dx-1>=0)
-                            M[col*(rows-1-(y-row_dx-1))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx-1))+x+l].valore);
-                    }
-                    row_sx=row_sx+2;
-                    row_dx=row_dx+2;
-                }
-
-                
-                if(row_dx==k) {
-                    j=0;
-                    do{
-                        if(x-l+1+j>=0 && x-l+1+j<col) {
-                            if(y+row_dx<rows)
-                                M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore);
-                            if(y-row_dx>=0)
-                                M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore);
-                        }
-                        j++;
-                    }while(j!=2*l-1);
-                }
-                
-                if(row_sx==k) {
-                    j=0;
-                    do{
-                        if(x-l+1+j>=0 && x-l+1+j<col) {
-                            if(y+row_sx<rows)
-                                M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore);
-                            if(y-row_sx>=0)
-                                M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore);
-                        }
-                        j++;
-                    }while(j!=2*l-1);
-                    if(x+l-1>=0 && x+l-1<col) {
-                        if(y+row_sx-1>=0 && y+row_sx-1<rows)
-                            M[col*(-(y+row_sx-1)+rows-1)+x+l-1].valore=check((r-k)/r * v + M[col*(-(y+row_sx-1)+rows-1)+x+l-1].valore);
-                        if(y-row_sx+1>=0 && y-row_sx+1<rows)
-                            M[col*(-(y-row_sx+1)+rows-1)+x+l-1].valore=check((r-k)/r * v + M[col*(-(y-row_sx+1)+rows-1)+x+l-1].valore);
-                    }
-                }
-                k++;
+            l=k;
+            if(x-k >=0){
+                M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
+                if(y-1>=0)
+                    M[col*(rows-y-2)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x-k].valore);
+                if(y+1<rows)
+                    M[col*(rows-y)+x-k].valore=check((r-k)/r * v + M[col*(rows-y)+x-k].valore);
             }
-        
+            if(x+k < col)
+                M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
+                
+            while(row_dx!=k && row_sx!=k) {
+                l--;
+                if(x-l>=0) {
+                    if(y+row_sx<rows)
+                        M[col*(rows-(y+row_sx)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx)-1)+x-l].valore);
+                    if(y+row_sx+1<rows)
+                        M[col*(rows-(y+row_sx+1)-1)+x-l].valore=check((r-k)/r * v + M[col*(rows-(y+row_sx+1)-1)+x-l].valore);
+                    if(y-row_sx>=0)
+                        M[col*(rows-1-(y-row_sx))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx))+x-l].valore);
+                    if(y-row_sx-1>=0)
+                        M[col*(rows-1-(y-row_sx-1))+x-l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_sx-1))+x-l].valore);
+                }
+                if(x+l<col) {
+                    if(y+row_dx<rows)
+                        M[col*(rows-1-(y+row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y+row_dx))+x+l].valore);
+                    if(y+row_dx+1<rows)
+                        M[col*(rows-(y+row_dx+1)-1)+x+l].valore=check((r-k)/r * v + M[col*(rows-(y+row_dx+1)-1)+x+l].valore);
+                    if(y-row_dx>=0)
+                        M[col*(rows-1-(y-row_dx))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx))+x+l].valore);
+                    if(y-row_dx-1>=0)
+                        M[col*(rows-1-(y-row_dx-1))+x+l].valore=check((r-k)/r * v + M[col*(rows-1-(y-row_dx-1))+x+l].valore);
+                }
+                row_sx=row_sx+2;
+                row_dx=row_dx+2;
+            }
+
+            if(row_dx==k) {
+                j=0;
+                do{
+                    if(x-l+1+j>=0 && x-l+1+j<col) {
+                        if(y+row_dx<rows)
+                            M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_dx)+rows-1)+x-l+1+j].valore);
+                        if(y-row_dx>=0)
+                            M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_dx)+rows-1)+x-l+1+j].valore);
+                    }
+                    j++;
+                }while(j!=2*l-1);
+            }
+                
+            if(row_sx==k) {
+                j=0;
+                do{
+                    if(x-l+1+j>=0 && x-l+1+j<col) {
+                        if(y+row_sx<rows)
+                            M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y+row_sx)+rows-1)+x-l+1+j].valore);
+                        if(y-row_sx>=0)
+                            M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore=check((r-k)/r * v + M[col*(-(y-row_sx)+rows-1)+x-l+1+j].valore);
+                    }
+                    j++;
+                }while(j!=2*l-1);
+                if(x+l-1>=0 && x+l-1<col) {
+                    if(y+row_sx-1>=0 && y+row_sx-1<rows)
+                        M[col*(-(y+row_sx-1)+rows-1)+x+l-1].valore=check((r-k)/r * v + M[col*(-(y+row_sx-1)+rows-1)+x+l-1].valore);
+                    if(y-row_sx+1>=0 && y-row_sx+1<rows)
+                        M[col*(-(y-row_sx+1)+rows-1)+x+l-1].valore=check((r-k)/r * v + M[col*(-(y-row_sx+1)+rows-1)+x+l-1].valore);
+                }
+            }
+            k++;
+        }
     }   
 }
 
 int check(int val) {
-
     if(val<0)
         return 0;
     if(val>100)
@@ -357,7 +350,6 @@ void adj(int x, int y, MovHex * M) {
         }
     }
            // stampaLista(M[col*(rows-y-1)+x].adiacenti);
-
 }
 
 void inserisciInTesta(Lista * testa, int x, int y) {
@@ -414,7 +406,6 @@ void cancellaNodo(Lista * testa, int x2, int y2) {
         free(tmp);
     }
 }
-
 
 void dijkstra(MovHex * M, int x, int y, Vet * Heap, int * indexHeap) {
     info u;
@@ -483,8 +474,6 @@ void dijkstra(MovHex * M, int x, int y, Vet * Heap, int * indexHeap) {
         }
     }
 }
-
-
 
 info HEAP_EXTRACT_MIN(Vet * Heap, int * indexHeap) {
     info min;
