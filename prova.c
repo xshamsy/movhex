@@ -1,3 +1,6 @@
+// riga 258
+// change_cost 23 97 7 89
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -39,7 +42,7 @@ struct Nodo {
 int check(int val);
 void adj(int x, int y, MovHex * M);
 void change_cost (int x, int y, int v, float r, MovHex * M);
-
+void liberaLista(Lista * l);
 void cancellaNodo(Lista * testa, int x2, int y2);
 int cercaNodo(Lista testa, int x2, int y2);
 int contaLista(Lista testa);
@@ -51,66 +54,54 @@ info HEAP_EXTRACT_MIN(Vet * Heap, int * indexHeap);
 void swap(Vet * Heap, int * indexHeap, int i, int j);
 void MIN_HEAPIFY(Vet * Heap, int * indexHeap, int i);
 
-int col, rows;
+int col=-1;
+int rows=-1;
 
 int main() {
-    if(scanf("init %d %d", &col, &rows)==2) {
-        MovHex * M;
-        M=(MovHex *) malloc(col*rows*sizeof(MovHex));
-        int i, j;
-        for(j=col-1; j>=0; j--) {
-            for(i=0; i<rows; i++) {
-                M[col*i+j].valore=1;
+    MovHex * M=NULL;
+    char c='p';
+    int i=0, j=0;
+    int v=0, x=0, y=0, x2=0, y2=0;
+    float r=0;
+    c=getchar();
+    while(c!=EOF) {
+        if(c=='i') {
+            if(col!=-1) {
+                for(j=col-1; j>=0; j--) {
+                    for(i=0; i<rows; i++) {
+                        liberaLista(&M[col*i+j].rotte);
+                        liberaLista(&M[col*i+j].adiacenti);
+
+                    }
+                }
+            }
+        
+            if(scanf("nit %d %d", &col, &rows)==2) {
+                if (M != NULL) { 
+                    free(M);
+                    M = NULL;
+                }
+                M=(MovHex *) malloc(col*rows*sizeof(MovHex));
+                for(j=col-1; j>=0; j--) {
+                    for(i=0; i<rows; i++) {
+                        M[col*i+j].valore=1;
+                        M[col*i+j].rotte=NULL;
+                        M[col*i+j].adiacenti=NULL;
+                    }
+                }
+                printf("OK\n");
             }
         }
-
-        M[col*(rows-4-1)+4].valore=10;
-
-        printf("OK\n");
-
-        int x, y, v,x2,y2;
-        float r;
-        /*char line[2];
-        while(1) {
-            if(scanf("\nchange_cost %d %d %d %f", &x, &y, &v, &r)) {
-                if(x>=0 && x<col && y>=0 && y<rows && r>0 && v>=-10 && v<=10) {
-                    change_cost(x,y,v,r, M, rows, col);
+        else if(c=='c') {
+            if(scanf("hange_cost %d %d %d %f", &i, &j, &v, &r)==4) {
+                if(i>=0 && i<col && j>=0 && j<rows && r>0 && v>=-10 && v<=10) {
+                    change_cost(i,j,v,r, M);
                     printf("OK\n");
                 }
                 else
                     printf("KO\n");
             }
-            if(scanf("\ntoggle_air_route %d %d %d %d", &x, &y, &x2, &y2)) {
-                if(cercaNodo(M[col*(rows-1-y)+x].rotte, x2, y2)) {
-                    cancellaNodo(&M[col*(rows-1-y)+x].rotte, x2, y2);
-                    printf("OK\n");
-
-                }
-                else if(contaLista(M[col*(rows-1-y)+x].rotte)==5) printf("KO\n");
-                else {
-                    inserisciInTesta(&M[col*(rows-1-y)+x].rotte, M[col*(rows-1-y2)+x2]);
-                    printf("OK\n");
-                }
-                //stampaLista(M[col*(rows-1-y)+x].rotte);
-            }
-            }*/
-
-            Vet Heap;
-            int * indexHeap;
-            Heap.A = (info *) malloc(col*rows*sizeof(info));
-            Heap.size = 0;
-            indexHeap = (int *) malloc(col*rows*sizeof(int));
-            for(i=0; i<rows; i++) {
-                for(j=0; j<col; j++) {
-                    Heap.A[col*i+j].val=-1;
-                    Heap.A[col*i+j].x=j;
-                    Heap.A[col*i+j].y=i;
-                    indexHeap[col*(rows-i-1)+j]=col*i+j;
-                }
-            }
-            
-
-            for(i=0; i<rows; i++) {
+            /*for(i=0; i<rows; i++) {
                 if((rows-i-1)%2==0)
                     printf("(%d) ", rows-i-1);
                 else
@@ -125,28 +116,105 @@ int main() {
             for(i=0; i<col; i++) {
                 printf("(%d)", i);
             }
+            printf("\n");*/
 
-            x=4;
-            y=4;
-            x2=0;
-            y2=0;
-            inserisciInTesta(&M[col*(rows-1-y)+x].rotte, x2, y2);
-
-            dijkstra(M, 4, 4, &Heap, indexHeap);
-            printf("\n\ndistanza minima da (4,4) a (0,0): %d", Heap.A[indexHeap[col*(rows-0-1)+0]].val);
-
-            printf("\n");
-
-                        
-
-            
+        }
+        else if(c=='t') {
+            c=getchar();
+            if(c=='o') {
+                if(scanf("ggle_air_route %d %d %d %d", &i, &j, &x2, &y2)==4) {
+                    if(i<0 || i>=col || rows-j-1<0 || rows-1-j>=rows || x2<0 || x2>=col || rows-y2-1<0 || rows-1-y2>=rows)
+                        printf("KO\n");
+                    else if(cercaNodo(M[col*(rows-1-j)+i].rotte, x2, y2)) {
+                        cancellaNodo(&M[col*(rows-1-j)+i].rotte, x2, y2);
+                        stampaLista(M[col*(rows-1-j)+i].rotte);
+                        printf("OK\n");
+                    }
+                    else if(contaLista(M[col*(rows-1-j)+i].rotte)==5) printf("KO\n");
+                    else {
+                        inserisciInTesta(&M[col*(rows-1-j)+i].rotte, x2, y2);
+                        stampaLista(M[col*(rows-1-j)+i].rotte);
+                        printf("OK\n");
+                    }
+                }
+            }
         
+            else if(c=='r') {
+                if(scanf("avel_cost %d %d %d %d", &x, &y, &x2, &y2)==4) {
+                    if(x<0 || x>=col || rows-y-1<0 || rows-1-y>=rows || x2<0 || x2>=col || rows-y2-1<0 || rows-1-y2>=rows)
+                        printf("-1\n");
+                    else if(M[col*(rows-1-y)+x].valore==0)
+                        printf("-1\n");
+                    else if(cercaNodo(M[col*(rows-1-y)+x].rotte, x2, y2)) 
+                        printf("%d\n", M[col*(rows-1-y)+x].valore);
+                    else if(cercaNodo(M[col*(rows-1-y)+x].adiacenti, x2, y2))
+                        printf("1\n");
+                    else {
+                        Vet Heap;
+                        Heap.A=NULL;
+                        int * indexHeap;
+                        indexHeap=NULL;
+                        Heap.A = (info *) malloc(col*rows*sizeof(info));
+                        Heap.size = 0;
+                        indexHeap = (int *) malloc(col*rows*sizeof(int));
+                        for(i=0; i<rows; i++) {
+                            for(j=0; j<col; j++) {
+                                Heap.A[col*i+j].val=-1;
+                                Heap.A[col*i+j].x=j;
+                                Heap.A[col*i+j].y=i;
+                                indexHeap[col*(rows-i-1)+j]=col*i+j;
+                            }
+                        }
+                        dijkstra(M, x, y, &Heap, indexHeap);
+                        printf("%d\n", Heap.A[indexHeap[col*(rows-y2-1)+x2]].val);
+                        free(Heap.A);
+                        free(indexHeap);
+                    }
+                }
+            }
+        }  
+        c=getchar();            
     }
+
+    if(col!=-1) {
+                for(j=col-1; j>=0; j--) {
+                    for(i=0; i<rows; i++) {
+                        liberaLista(&M[col*i+j].rotte);
+                                                liberaLista(&M[col*i+j].adiacenti);
+
+                    }
+                }
+            }
+        
+            
+                if (M != NULL) { 
+                    free(M);
+                    M = NULL;
+                }
+        
 }
 
+
+            
+    
+
+
+
+        
+
+
+       
+            
+            
+
+            
+
+
+
+
 void change_cost (int x, int y, int v, float r, MovHex * M) {
-    int j;
-    int k, row_sx, row_dx, l;
+    int j=0;
+    int k=0, row_sx=0, row_dx=0, l=0;
     M[col*(rows-1-y)+x].valore=check(v+M[col*(rows-1-y)+x].valore);
 
     if(y%2==0) {
@@ -159,10 +227,9 @@ void change_cost (int x, int y, int v, float r, MovHex * M) {
             if(x-k >=0)
                 M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
             if(x+k < col) {
-                if(y-1>=0)
-                    M[col*(rows-y-2)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x+k].valore);
                 if(y+1<rows)
-                    M[col*(rows-y)+x+k].valore=check((r-k)/r * v + M[col*(rows-y)+x+k].valore);
+                    M[col*(rows-y-2)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x+k].valore);
+                M[col*(rows-y)+x+k].valore=check((r-k)/r * v + M[col*(rows-y)+x+k].valore);
                 M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
             }
                 
@@ -236,10 +303,9 @@ void change_cost (int x, int y, int v, float r, MovHex * M) {
             l=k;
             if(x-k >=0){
                 M[col*(rows-y-1)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x-k].valore);
-                if(y-1>=0)
-                    M[col*(rows-y-2)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x-k].valore);
                 if(y+1<rows)
-                    M[col*(rows-y)+x-k].valore=check((r-k)/r * v + M[col*(rows-y)+x-k].valore);
+                    M[col*(rows-y-2)+x-k].valore=check((r-k)/r * v + M[col*(rows-y-2)+x-k].valore);
+                M[col*(rows-y)+x-k].valore=check((r-k)/r * v + M[col*(rows-y)+x-k].valore);
             }
             if(x+k < col)
                 M[col*(rows-y-1)+x+k].valore=check((r-k)/r * v + M[col*(rows-y-1)+x+k].valore);
@@ -425,7 +491,8 @@ void dijkstra(MovHex * M, int x, int y, Vet * Heap, int * indexHeap) {
         u=HEAP_EXTRACT_MIN(Heap, indexHeap);
 
         if(M[col*(rows-1-u.y)+u.x].valore!=0) { //le piastrelle 0 non hanno adiacenti
-            adj(u.x, u.y, M);
+            if(M[col*(rows-1-u.y)+u.x].adiacenti==NULL)
+                adj(u.x, u.y, M);
             ptr_adj=M[col*(rows-1-u.y)+u.x].adiacenti;
             ptr_rotte=M[col*(rows-1-u.y)+u.x].rotte;
             while(ptr_adj!=NULL) {
@@ -449,6 +516,9 @@ void dijkstra(MovHex * M, int x, int y, Vet * Heap, int * indexHeap) {
                 }
                 ptr_adj=(ptr_adj)->prox;
             }
+
+
+
 
             while(ptr_rotte!=NULL) {
                 i=indexHeap[col*(rows-((ptr_rotte->info).y)-1)+(ptr_rotte->info).x];
@@ -517,4 +587,13 @@ void MIN_HEAPIFY(Vet * Heap, int * indexHeap, int i) {
 }
 
 
+void liberaLista(Lista * l) {
+    Nodo *tmp;
+    while ((*l)!=NULL) {
+        tmp=*l;
+        *l=(*l)->prox;
+        free(tmp);
+    }
+    (*l)=NULL;
+}
 
